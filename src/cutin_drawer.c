@@ -63,4 +63,12 @@ void updateCutin(void)
     const float lineY = linear(MOVE_START, MOVE_DEST, ratio);
     drawDoubleLine(lineY, DOUBLE_LINE_GAP);
     drawDoubleLine(-1.0f * lineY, -1.0f * DOUBLE_LINE_GAP);
+
+    _pd->graphics->fillRect( 0.0f, DISPLAY_CENTER + lineY,
+                             DISPLAY_WIDTH, -2.0f * lineY, kColorBlack );
+
+    const float CHAR_WIDTH = 45;
+    const float CHAR_HEIGHT = 45;
+    _pd->graphics->fillRect( 20.0f, DISPLAY_CENTER - (CHAR_HEIGHT * 0.5f),
+                             CHAR_WIDTH, CHAR_HEIGHT, kColorWhite );
 }

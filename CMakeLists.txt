@@ -41,12 +41,12 @@ file(GLOB IMAGES
 if (TOOLCHAIN STREQUAL "armgcc")
 	add_executable(${PLAYDATE_GAME_DEVICE} ${SDK}/C_API/buildsupport/setup.c
 			src/main.c
-			src/cutin_drawer.c src/name_drawer.c)
+			src/cutin_drawer.c src/name_drawer.c src/pd_util.c)
 	target_link_libraries(${PLAYDATE_GAME_DEVICE} core)
 else()
 	add_library(${PLAYDATE_GAME_NAME} SHARED ${IMAGES}
 			src/main.c
-			src/cutin_drawer.c src/name_drawer.c)
+			src/cutin_drawer.c src/name_drawer.c src/pd_util.c)
 	target_link_libraries(${PLAYDATE_GAME_NAME} core)
 endif()
 

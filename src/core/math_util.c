@@ -31,3 +31,15 @@ float clamp(float value, float min, float max)
         return min;
     return value;
 }
+
+float linear(float value1, float value2, float ratio)
+{
+    ratio = clamp(ratio, 0.0f, 1.0f);
+    const float d = value2 - value1;
+    return value1 + d * ratio;
+}
+
+float easeInOut(float ts)
+{
+    return -2.0f * ts * ts * ts + 3.0f * ts * ts;
+}

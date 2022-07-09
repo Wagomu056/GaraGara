@@ -5,6 +5,7 @@
 #include "pd_api.h"
 #include "log.h"
 #include "cutin_drawer.h"
+#include "name_drawer.h"
 
 #ifdef _WINDLL
 __declspec(dllexport)
@@ -22,8 +23,13 @@ int update(void* ud)
     }
 
     _pd->graphics->clear(kColorWhite);
-    _pd->sprite->updateAndDrawSprites();
+
     updateCutin();
+
+    //updateName();
+    //_pd->sprite->updateAndDrawSprites();
+    _pd->sprite->drawSprites();
+
     return 1;
 }
 
@@ -34,6 +40,7 @@ int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)
         _pd = pd;
         LOG("init");
         initCutin(pd);
+        initName(pd);
         pd->system->setUpdateCallback(update, NULL);
     }
 

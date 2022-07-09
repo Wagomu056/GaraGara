@@ -14,3 +14,13 @@ LCDBitmap *loadImageAtPath(PlaydateAPI* pd, const char *path)
     return img;
 }
 
+LCDFont *loadFontAtPath(PlaydateAPI* pd, const char *path)
+{
+    const char *outErr = NULL;
+    LCDFont *font = pd->graphics->loadFont(path, &outErr);
+    if ( outErr != NULL ) {
+        pd->system->logToConsole("Error loading font at path '%s': %s", path, outErr);
+    }
+    return font;
+}
+

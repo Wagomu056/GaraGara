@@ -8,5 +8,6 @@
 #include <pd_api.h>
 
 LCDBitmap *loadImageAtPath(PlaydateAPI* pd, const char *path);
+LCDFont *loadFontAtPath(PlaydateAPI* pd, const char *path);
 
 #endif //BOUND_BALL_PD_UITL_H

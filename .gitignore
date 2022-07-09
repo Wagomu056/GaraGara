@@ -1,3 +1,7 @@
 cmake-build-debug
 garagara.pdx
 .idea
+.nova
+Source/pdex.bin
+Source/pdex.dylib
+.DS_Store

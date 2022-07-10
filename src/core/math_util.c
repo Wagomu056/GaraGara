@@ -32,6 +32,15 @@ float clamp(float value, float min, float max)
     return value;
 }
 
+int clampI(int value, int min, int max)
+{
+    if (value > max)
+        return max;
+    if (value < min)
+        return min;
+    return value;
+}
+
 float linear(float value1, float value2, float ratio)
 {
     ratio = clamp(ratio, 0.0f, 1.0f);

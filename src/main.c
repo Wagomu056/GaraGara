@@ -26,7 +26,7 @@ int update(void* ud)
 
     updateCutin();
 
-    //updateName();
+    updateName();
     //_pd->sprite->updateAndDrawSprites();
     _pd->sprite->drawSprites();
 

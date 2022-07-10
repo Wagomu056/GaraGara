@@ -36,6 +36,7 @@ project(${PLAYDATE_GAME_NAME} C ASM)
 
 file(GLOB IMAGES
 		"Source/images/*"
+		"Source/font/*"
 )
 
 if (TOOLCHAIN STREQUAL "armgcc")

@@ -20,6 +20,8 @@ int update(void* ud)
     if ( pushed & kButtonA )
     {
         startCutin();
+        const char name[] = "AZUMA";
+        startName(name, sizeof(name));
     }
 
     _pd->graphics->clear(kColorWhite);

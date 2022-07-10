@@ -8,6 +8,7 @@
 #include <pd_api.h>
 
 void initName(PlaydateAPI* pd);
+void startName(const char *name, int count);
 void updateName(void);
 
 #endif //BOUND_BALL_NAME_DRAWER_H

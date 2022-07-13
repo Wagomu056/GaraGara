@@ -12,8 +12,14 @@ static PlaydateAPI* _pd;
 static const int ALPHABET_NUM = 26;
 static LCDBitmap *_images[ALPHABET_NUM] = {NULL};
 
-static const int SPRITE_NUM = 8;
-static LCDSprite *_sprites[SPRITE_NUM] = {NULL};
+static const int CHAR_PADDING = 2;
+static const int CHAR_NUM = 8;
+struct NameChar
+{
+    LCDSprite *sprite;
+    int width;
+};
+static struct NameChar _nameChars[CHAR_NUM] = {0};
 
 LCDBitmap* findBitmap(char c)
 {
@@ -46,8 +52,9 @@ void initName(PlaydateAPI* pd)
 
 static void clearSprites()
 {
-    for(int i = 0; i < SPRITE_NUM; i++) {
-        _sprites[i] = NULL;
+    for(int i = 0; i < CHAR_NUM; i++) {
+        _nameChars[i].sprite = NULL;
+        _nameChars[i].width = 0;
     }
 }
 
@@ -55,25 +62,33 @@ void startName(const char *name, int count)
 {
     clearSprites();
 
-    const int cnt = (count <= SPRITE_NUM) ? count : SPRITE_NUM;
+    const int cnt = (count <= CHAR_NUM) ? count : CHAR_NUM;
     for (int i = 0; i < cnt; i++)
     {
         if (name[i] == '\0') break;
 
         LCDBitmap *bitmap = findBitmap(name[i]);
-        _sprites[i] = createSprite(_pd, bitmap);
-        _pd->sprite->addSprite(_sprites[i]);
+        _nameChars[i].sprite = createSprite(_pd, bitmap);
+        _pd->graphics->getBitmapData(bitmap, &(_nameChars[i].width),
+                                     NULL, NULL, NULL, NULL);
+        _pd->sprite->addSprite(_nameChars[i].sprite);
     }
 }
 
-static const int CHAR_WIDTH = 48;
 void updateName(void)
 {
-    for (int i = 0; i < SPRITE_NUM; i++)
-    {
-        if (_sprites[i] == NULL) break;
+    if (_nameChars[0].sprite == NULL)
+        return;
 
-        const int x = (CHAR_WIDTH / 2) + (CHAR_WIDTH * i);
-        _pd->sprite->moveTo(_sprites[i], x, 120.0f);
+    int currentWidth = 0;
+    for (int i = 0; i < CHAR_NUM; i++)
+    {
+        LCDSprite *sprite = _nameChars[i].sprite;
+        if (sprite == NULL) break;
+
+        const int width = _nameChars[i].width / 2;
+        currentWidth += width;
+        _pd->sprite->moveTo(sprite, currentWidth, 120.0f);
+        currentWidth += width + CHAR_PADDING;
     }
 }

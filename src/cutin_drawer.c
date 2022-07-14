@@ -6,18 +6,23 @@
 #include "defines.h"
 #include "math_util.h"
 #include "pd_uitl.h"
+#include "name_drawer.h"
 
 static const float DISPLAY_CENTER_X = DISPLAY_WIDTH * 0.5f;
 static const float DISPLAY_CENTER_Y = DISPLAY_HEIGHT * 0.5f;
 
-static const float MOVE_SPEED = 1.0f / 10.0f;
-static const float MOVE_START = 0.0;
-static const float MOVE_DEST = -75.0f;
+static const float FLICK_SPEED = 1.0f / 20.0f;
+static const float FLICK_WAIT_SPEED = 1.0f / 30.0f;
+static const float MAIN_OPEN_SPEED = 1.0f / 5.0f;
+
+static const float FLICK_OPEN_START = 0.0;
+static const float FLICK_OPEN_DEST = -15.0f;
+static const float MAIN_OPEN_DEST = -75.0f;
+
 static const int SPRITE_Z = 900;
 
 static PlaydateAPI* _pd;
 static float _moveRatio = 1.0f;
-static int _isStarted = 0;
 
 static LCDBitmap *_image = NULL;
 static const int BOARDER_NUM = 2;
@@ -27,6 +32,15 @@ static LCDBitmap *_tileImage = NULL;
 static LCDSprite *_tileSprite = NULL;
 
 static CutinEndHandler _cutinEndHandler = NULL;
+
+enum CutinStatus
+{
+    CUTIN_ST_NONE = 0,
+    CUTIN_ST_FLICK,
+    CUTIN_ST_FLICK_STOP,
+    CUTIN_ST_MAIN,
+};
+static enum CutinStatus _status = CUTIN_ST_NONE;
 
 void initCutin(PlaydateAPI* pd)
 {
@@ -52,12 +66,14 @@ void initCutin(PlaydateAPI* pd)
 
         _tileSprite = sprite;
     }
+
+    initName(pd);
 }
 
 void startCutin(void)
 {
     _moveRatio = 0.0f;
-    _isStarted = 1;
+    _status = CUTIN_ST_FLICK;
 
     for (int i = 0; i < BOARDER_NUM; i++)
     {
@@ -65,13 +81,16 @@ void startCutin(void)
         _pd->sprite->moveTo(_sprites[i], DISPLAY_CENTER_X, DISPLAY_CENTER_Y);
     }
     _pd->sprite->addSprite(_tileSprite);
+
+    const char name[] = "AZUMA";
+    startName(name, sizeof(name));
 }
 
-static void updateMoveRatio(float *ratio)
+static void updateMoveRatio(float *ratio, float speed)
 {
     if (*ratio >= 1.0f) return;
 
-    *ratio += MOVE_SPEED;
+    *ratio += speed;
     if (*ratio >= 1.0f) {
         *ratio = 1.0f;
     }
@@ -82,27 +101,65 @@ static void moveBoarder(int idx, float y)
     _pd->sprite->moveTo(_sprites[idx], DISPLAY_CENTER_X, DISPLAY_CENTER_Y + y);
 }
 
-void updateCutin(void)
+static int updateCutinImpl(float *ratioWork, float speed, float start, float dest)
 {
-    if (!_isStarted) return;
+    updateMoveRatio(ratioWork, speed);
 
-    const float prev = _moveRatio;
-    updateMoveRatio(&_moveRatio);
-
-    if (prev != _moveRatio && _moveRatio == 1.0f) {
-       if (_cutinEndHandler) {
-           _cutinEndHandler();
-       }
-    }
-
-    const float ratio = easeInOut(_moveRatio);
-    const float lineY = linear(MOVE_START, MOVE_DEST, ratio);
+    const float ratio = easeInOut(*ratioWork);
+    const float lineY = linear(start, dest, ratio);
     moveBoarder(0, lineY);
     moveBoarder(1, -1.0f * lineY);
 
     LCDRect rect = {0, DISPLAY_WIDTH,
                     DISPLAY_CENTER_Y + lineY + 8, DISPLAY_CENTER_Y + -1.0f * lineY - 8};
     _pd->sprite->setClipRect(_tileSprite, rect);
+
+    updateName(&rect);
+
+    return (*ratioWork >= 1.0f);
+}
+
+static int updateTimeOnly(float *ratioWork, float speed)
+{
+    updateMoveRatio(ratioWork, speed);
+    return (*ratioWork >= 1.0f);
+}
+
+void updateCutin(void)
+{
+    switch (_status) {
+        case CUTIN_ST_NONE:
+            return;
+        case CUTIN_ST_FLICK:
+        {
+            const int isEnd =
+                    updateCutinImpl(&_moveRatio,
+                                    FLICK_SPEED,
+                                    FLICK_OPEN_START, FLICK_OPEN_DEST);
+            if (isEnd) {
+                _status = CUTIN_ST_FLICK_STOP;
+                _moveRatio = 0.0f;
+            }
+            break;
+        }
+        case CUTIN_ST_FLICK_STOP:
+        {
+            const int isEnd =
+                    updateTimeOnly(&_moveRatio, FLICK_WAIT_SPEED * 1.5f);
+            if (isEnd) {
+                _status = CUTIN_ST_MAIN;
+                _moveRatio = 0.0f;
+            }
+           break;
+        }
+        case CUTIN_ST_MAIN:
+        {
+            updateCutinImpl( &_moveRatio,
+                             MAIN_OPEN_SPEED,
+                             FLICK_OPEN_DEST, MAIN_OPEN_DEST);
+            break;
+        }
+    }
 }
 
 void registerCutinEnd(CutinEndHandler handler)

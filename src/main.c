@@ -5,7 +5,6 @@
 #include "pd_api.h"
 #include "log.h"
 #include "cutin_drawer.h"
-#include "name_drawer.h"
 
 #ifdef _WINDLL
 __declspec(dllexport)
@@ -24,7 +23,6 @@ int update(void* ud)
 
     _pd->graphics->clear(kColorWhite);
     updateCutin();
-    updateName();
 
     _pd->sprite->drawSprites();
 
@@ -34,8 +32,6 @@ int update(void* ud)
 void cutinEnd(void)
 {
     LOG("Cut in end.");
-    const char name[] = "AZUMA";
-    startName(name, sizeof(name));
 }
 
 int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)
@@ -46,7 +42,6 @@ int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)
         initCutin(pd);
         registerCutinEnd(&cutinEnd);
 
-        initName(pd);
         pd->system->setUpdateCallback(update, NULL);
     }
 

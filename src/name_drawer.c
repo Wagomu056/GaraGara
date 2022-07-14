@@ -53,6 +53,11 @@ void initName(PlaydateAPI* pd)
 static void clearSprites()
 {
     for(int i = 0; i < CHAR_NUM; i++) {
+        LCDSprite *sprite = _nameChars[i].sprite;
+        if (sprite) {
+            _pd->sprite->removeSprite(sprite);
+        }
+
         _nameChars[i].sprite = NULL;
         _nameChars[i].width = 0;
     }
@@ -75,7 +80,7 @@ void startName(const char *name, int count)
     }
 }
 
-void updateName(void)
+void updateName(LCDRect* drawRect)
 {
     if (_nameChars[0].sprite == NULL)
         return;
@@ -89,6 +94,11 @@ void updateName(void)
         const int width = _nameChars[i].width / 2;
         currentWidth += width;
         _pd->sprite->moveTo(sprite, currentWidth, 120.0f);
+
+        if (drawRect) {
+            _pd->sprite->setClipRect(sprite, *drawRect);
+        }
+
         currentWidth += width + CHAR_PADDING;
     }
 }

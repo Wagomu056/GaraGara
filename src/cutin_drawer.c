@@ -11,12 +11,12 @@
 static const float DISPLAY_CENTER_X = DISPLAY_WIDTH * 0.5f;
 static const float DISPLAY_CENTER_Y = DISPLAY_HEIGHT * 0.5f;
 
-static const float FLICK_SPEED = 1.0f / 20.0f;
-static const float FLICK_WAIT_SPEED = 1.0f / 30.0f;
+static const float QUICK_SPEED = 1.0f / 20.0f;
+static const float QUICK_WAIT_SPEED = 1.0f / 20.0f;
 static const float MAIN_OPEN_SPEED = 1.0f / 5.0f;
 
-static const float FLICK_OPEN_START = 0.0;
-static const float FLICK_OPEN_DEST = -15.0f;
+static const float QUICK_OPEN_START = 0.0;
+static const float QUICK_OPEN_DEST = -15.0f;
 static const float MAIN_OPEN_DEST = -75.0f;
 
 static const int SPRITE_Z = 900;
@@ -36,8 +36,8 @@ static CutinEndHandler _cutinEndHandler = NULL;
 enum CutinStatus
 {
     CUTIN_ST_NONE = 0,
-    CUTIN_ST_FLICK,
-    CUTIN_ST_FLICK_STOP,
+    CUTIN_ST_QUICK,
+    CUTIN_ST_QUICK_STOP,
     CUTIN_ST_MAIN,
 };
 static enum CutinStatus _status = CUTIN_ST_NONE;
@@ -73,7 +73,7 @@ void initCutin(PlaydateAPI* pd)
 void startCutin(void)
 {
     _moveRatio = 0.0f;
-    _status = CUTIN_ST_FLICK;
+    _status = CUTIN_ST_QUICK;
 
     for (int i = 0; i < BOARDER_NUM; i++)
     {
@@ -130,22 +130,22 @@ void updateCutin(void)
     switch (_status) {
         case CUTIN_ST_NONE:
             return;
-        case CUTIN_ST_FLICK:
+        case CUTIN_ST_QUICK:
         {
             const int isEnd =
                     updateCutinImpl(&_moveRatio,
-                                    FLICK_SPEED,
-                                    FLICK_OPEN_START, FLICK_OPEN_DEST);
+                                    QUICK_SPEED,
+                                    QUICK_OPEN_START, QUICK_OPEN_DEST);
             if (isEnd) {
-                _status = CUTIN_ST_FLICK_STOP;
+                _status = CUTIN_ST_QUICK_STOP;
                 _moveRatio = 0.0f;
             }
             break;
         }
-        case CUTIN_ST_FLICK_STOP:
+        case CUTIN_ST_QUICK_STOP:
         {
             const int isEnd =
-                    updateTimeOnly(&_moveRatio, FLICK_WAIT_SPEED * 1.5f);
+                    updateTimeOnly(&_moveRatio, QUICK_WAIT_SPEED * 1.5f);
             if (isEnd) {
                 _status = CUTIN_ST_MAIN;
                 _moveRatio = 0.0f;
@@ -156,7 +156,7 @@ void updateCutin(void)
         {
             updateCutinImpl( &_moveRatio,
                              MAIN_OPEN_SPEED,
-                             FLICK_OPEN_DEST, MAIN_OPEN_DEST);
+                             QUICK_OPEN_DEST, MAIN_OPEN_DEST);
             break;
         }
     }

@@ -26,6 +26,8 @@ static LCDSprite *_sprites[BOARDER_NUM] = {NULL};
 static LCDBitmap *_tileImage = NULL;
 static LCDSprite *_tileSprite = NULL;
 
+static CutinEndHandler _cutinEndHandler = NULL;
+
 void initCutin(PlaydateAPI* pd)
 {
     _pd = pd;
@@ -84,7 +86,14 @@ void updateCutin(void)
 {
     if (!_isStarted) return;
 
+    const float prev = _moveRatio;
     updateMoveRatio(&_moveRatio);
+
+    if (prev != _moveRatio && _moveRatio == 1.0f) {
+       if (_cutinEndHandler) {
+           _cutinEndHandler();
+       }
+    }
 
     const float ratio = easeInOut(_moveRatio);
     const float lineY = linear(MOVE_START, MOVE_DEST, ratio);
@@ -94,4 +103,9 @@ void updateCutin(void)
     LCDRect rect = {0, DISPLAY_WIDTH,
                     DISPLAY_CENTER_Y + lineY + 8, DISPLAY_CENTER_Y + -1.0f * lineY - 8};
     _pd->sprite->setClipRect(_tileSprite, rect);
+}
+
+void registerCutinEnd(CutinEndHandler handler)
+{
+    _cutinEndHandler = handler;
 }

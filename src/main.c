@@ -20,19 +20,22 @@ int update(void* ud)
     if ( pushed & kButtonA )
     {
         startCutin();
-        const char name[] = "AZUMA";
-        startName(name, sizeof(name));
     }
 
     _pd->graphics->clear(kColorWhite);
-
     updateCutin();
-
     updateName();
-    //_pd->sprite->updateAndDrawSprites();
+
     _pd->sprite->drawSprites();
 
     return 1;
+}
+
+void cutinEnd(void)
+{
+    LOG("Cut in end.");
+    const char name[] = "AZUMA";
+    startName(name, sizeof(name));
 }
 
 int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)
@@ -40,8 +43,9 @@ int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)
     if (event == kEventInit)
     {
         _pd = pd;
-        LOG("init");
         initCutin(pd);
+        registerCutinEnd(&cutinEnd);
+
         initName(pd);
         pd->system->setUpdateCallback(update, NULL);
     }

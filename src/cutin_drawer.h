@@ -7,8 +7,11 @@
 
 #include <pd_api.h>
 
+typedef void (* CutinEndHandler)(void);
+
 void initCutin(PlaydateAPI* pd);
 void startCutin(void);
 void updateCutin(void);
+void registerCutinEnd(CutinEndHandler handler);
 
 #endif //BOUND_BALL_CUTIN_DRAWER_H

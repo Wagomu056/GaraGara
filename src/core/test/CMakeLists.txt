@@ -1,7 +1,7 @@
 project(test_run)
 
 find_package(GTest REQUIRED)
-add_executable(test src/math_util_test.cpp)
+add_executable(test src/math_util_test.cpp src/lottery_test.cpp)
 
 target_include_directories(test
         PRIVATE ../include)

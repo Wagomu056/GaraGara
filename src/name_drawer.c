@@ -14,6 +14,9 @@ static LCDBitmap *_images[ALPHABET_NUM] = {NULL};
 
 static const int CHAR_PADDING = 2;
 static const int CHAR_NUM = 8;
+
+static int NAME_START_PADDING = 20;
+
 struct NameChar
 {
     LCDSprite *sprite;
@@ -85,7 +88,7 @@ void updateName(LCDRect* drawRect)
     if (_nameChars[0].sprite == NULL)
         return;
 
-    int currentWidth = 0;
+    int currentWidth = NAME_START_PADDING;
     for (int i = 0; i < CHAR_NUM; i++)
     {
         LCDSprite *sprite = _nameChars[i].sprite;

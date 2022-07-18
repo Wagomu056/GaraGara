@@ -38,3 +38,13 @@ TEST(Lottery, lotteryMulti) {
         EXPECT_TRUE(exists);
     }
 }
+
+TEST(Lottery, over) {
+    registerLottery("ABC");
+    const char *ret = lottery();
+    EXPECT_STREQ("ABC", ret);
+
+    const char *retEmpty = lottery();
+    EXPECT_STREQ("", retEmpty);
+}
+

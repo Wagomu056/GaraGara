@@ -25,7 +25,7 @@ static void swapName(int a, int b)
     _names[b] = tmp;
 }
 
-const char* lottery()
+const char* lottery(void)
 {
     if (_registerNum == 0)
         return "";

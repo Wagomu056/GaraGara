@@ -5,6 +5,7 @@
 #include "pd_api.h"
 #include "log.h"
 #include "cutin_drawer.h"
+#include "lottery.h"
 
 #ifdef _WINDLL
 __declspec(dllexport)
@@ -18,7 +19,10 @@ int update(void* ud)
     _pd->system->getButtonState(NULL, &pushed, NULL);
     if ( pushed & kButtonA )
     {
-        startCutin("AZUMA");
+        const char *name = lottery();
+        if (strcmp(name, "") != 0) {
+            startCutin(name);
+        }
     }
 
     _pd->graphics->clear(kColorWhite);
@@ -38,6 +42,15 @@ static void initialize()
 {
     initCutin(_pd);
     registerCutinEnd(&cutinEnd);
+
+    registerLottery("AZUMA");
+    registerLottery("AOKI");
+    registerLottery("TATSUYA");
+    registerLottery("MIURA");
+    registerLottery("ITO");
+    registerLottery("KAMIHAMA");
+    registerLottery("YOSHIDA");
+    registerLottery("KAKI");
 }
 
 int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)

@@ -6,6 +6,6 @@
 #define BOUND_BALL_LOTTERY_H
 
 void registerLottery(const char* name);
-const char* lottery();
+const char* lottery(void);
 
 #endif //BOUND_BALL_LOTTERY_H

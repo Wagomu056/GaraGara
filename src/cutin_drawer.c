@@ -70,7 +70,7 @@ void initCutin(PlaydateAPI* pd)
     initName(pd);
 }
 
-void startCutin(void)
+void startCutin(const char *name)
 {
     _moveRatio = 0.0f;
     _status = CUTIN_ST_QUICK;
@@ -82,7 +82,6 @@ void startCutin(void)
     }
     _pd->sprite->addSprite(_tileSprite);
 
-    const char name[] = "AZUMA";
     startName(name, sizeof(name));
 }
 

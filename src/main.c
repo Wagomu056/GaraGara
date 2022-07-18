@@ -18,7 +18,7 @@ int update(void* ud)
     _pd->system->getButtonState(NULL, &pushed, NULL);
     if ( pushed & kButtonA )
     {
-        startCutin();
+        startCutin("AZUMA");
     }
 
     _pd->graphics->clear(kColorWhite);

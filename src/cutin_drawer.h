@@ -10,7 +10,7 @@
 typedef void (* CutinEndHandler)(void);
 
 void initCutin(PlaydateAPI* pd);
-void startCutin(void);
+void startCutin(const char *name);
 void updateCutin(void);
 void registerCutinEnd(CutinEndHandler handler);
 

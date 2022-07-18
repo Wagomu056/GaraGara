@@ -34,15 +34,20 @@ void cutinEnd(void)
     LOG("Cut in end.");
 }
 
+static void initialize()
+{
+    initCutin(_pd);
+    registerCutinEnd(&cutinEnd);
+}
+
 int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)
 {
     if (event == kEventInit)
     {
         _pd = pd;
-        initCutin(pd);
-        registerCutinEnd(&cutinEnd);
-
         pd->system->setUpdateCallback(update, NULL);
+
+        initialize();
     }
 
     return 0;

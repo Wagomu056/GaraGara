@@ -6,6 +6,7 @@
 #include "log.h"
 #include "cutin_drawer.h"
 #include "lottery.h"
+#include "gara.h"
 
 #ifdef _WINDLL
 __declspec(dllexport)
@@ -30,6 +31,8 @@ int update(void* ud)
 
     _pd->sprite->drawSprites();
 
+    updateGara();
+
     return 1;
 }
 
@@ -51,6 +54,8 @@ static void initialize()
     registerLottery("KAMIHAMA");
     registerLottery("YOSHIDA");
     registerLottery("KAKI");
+
+    initGara(_pd);
 }
 
 int eventHandler(PlaydateAPI* pd, PDSystemEvent event, uint32_t arg)

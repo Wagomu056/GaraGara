@@ -31,7 +31,8 @@ int update(void* ud)
 
     _pd->sprite->drawSprites();
 
-    updateGara();
+    const float crankAngle = _pd->system->getCrankAngle();
+    updateGara(crankAngle);
 
     return 1;
 }

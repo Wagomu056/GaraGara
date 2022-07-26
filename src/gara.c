@@ -34,13 +34,10 @@ void initGara(PlaydateAPI* pd)
     }
 }
 
-static int _rot = 1;
-void updateGara(void)
+void updateGara(float garaRotDeg)
 {
-    float cur = (float)(_rot % 360);
     _pd->graphics->drawRotatedBitmap(_image, 200, 120,
-                                     cur, 0.5f, 0.5f, 1.0f, 1.0f);
-    _rot+=5;
+                                     garaRotDeg, 0.5f, 0.5f, 1.0f, 1.0f);
 
     _pd->graphics->drawBitmap(_image_base, 125, 103, kBitmapUnflipped);
 }

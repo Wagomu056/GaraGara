@@ -8,6 +8,6 @@
 #include <pd_api.h>
 
 void initGara(PlaydateAPI* pd);
-void updateGara(void);
+void updateGara(float garaRotDeg);
 
 #endif //BOUND_BALL_GARA_H

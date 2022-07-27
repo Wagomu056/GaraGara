@@ -110,7 +110,7 @@ static int updateCutinImpl(float *ratioWork, float speed, float start, float des
     moveBoarder(1, -1.0f * lineY);
 
     LCDRect rect = {0, DISPLAY_WIDTH,
-                    DISPLAY_CENTER_Y + lineY + 8, DISPLAY_CENTER_Y + -1.0f * lineY - 8};
+                    DISPLAY_CENTER_Y + lineY + 4, DISPLAY_CENTER_Y + -1.0f * lineY - 4};
     _pd->sprite->setClipRect(_tileSprite, rect);
 
     updateName(&rect);

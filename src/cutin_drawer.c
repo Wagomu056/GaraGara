@@ -39,6 +39,7 @@ enum CutinStatus
     CUTIN_ST_QUICK,
     CUTIN_ST_QUICK_STOP,
     CUTIN_ST_MAIN,
+    CUTIN_ST_END_WAIT,
 };
 static enum CutinStatus _status = CUTIN_ST_NONE;
 
@@ -153,9 +154,19 @@ void updateCutin(void)
         }
         case CUTIN_ST_MAIN:
         {
-            updateCutinImpl( &_moveRatio,
-                             MAIN_OPEN_SPEED,
-                             QUICK_OPEN_DEST, MAIN_OPEN_DEST);
+            int isEnd = updateCutinImpl( &_moveRatio,
+                                         MAIN_OPEN_SPEED,
+                                         QUICK_OPEN_DEST, MAIN_OPEN_DEST);
+            if (isEnd) {
+                _status = CUTIN_ST_END_WAIT;
+                if (_cutinEndHandler) {
+                    _cutinEndHandler();
+                }
+            }
+            break;
+        }
+        case CUTIN_ST_END_WAIT:
+        {
             break;
         }
     }
@@ -164,4 +175,18 @@ void updateCutin(void)
 void registerCutinEnd(CutinEndHandler handler)
 {
     _cutinEndHandler = handler;
+}
+
+void clearCutin(void)
+{
+    _status = CUTIN_ST_NONE;
+    _moveRatio = 0.0f;
+
+    for (int i = 0; i < BOARDER_NUM; i++)
+    {
+        _pd->sprite->removeSprite(_sprites[i]);
+    }
+    _pd->sprite->removeSprite(_tileSprite);
+
+    clearName();
 }

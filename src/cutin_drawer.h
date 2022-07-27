@@ -13,5 +13,6 @@ void initCutin(PlaydateAPI* pd);
 void startCutin(const char *name);
 void updateCutin(void);
 void registerCutinEnd(CutinEndHandler handler);
+void clearCutin(void);
 
 #endif //BOUND_BALL_CUTIN_DRAWER_H

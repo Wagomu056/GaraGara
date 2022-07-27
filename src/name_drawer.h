@@ -9,6 +9,7 @@
 
 void initName(PlaydateAPI* pd);
 void startName(const char *name, int count);
+void clearName(void);
 void updateName(LCDRect* drawRect);
 
 #endif //BOUND_BALL_NAME_DRAWER_H

@@ -17,6 +17,8 @@ static const int CHAR_NUM = 8;
 
 static int NAME_START_PADDING = 20;
 
+static int isDrawing = 0;
+
 struct NameChar
 {
     LCDSprite *sprite;
@@ -53,8 +55,13 @@ void initName(PlaydateAPI* pd)
     }
 }
 
-static void clearSprites()
+void clearName(void)
 {
+    if (!isDrawing)
+        return;
+
+    isDrawing = 0;
+
     for(int i = 0; i < CHAR_NUM; i++) {
         LCDSprite *sprite = _nameChars[i].sprite;
         if (sprite) {
@@ -68,7 +75,9 @@ static void clearSprites()
 
 void startName(const char *name, int count)
 {
-    clearSprites();
+    clearName();
+
+    isDrawing = 1;
 
     const int cnt = (count <= CHAR_NUM) ? count : CHAR_NUM;
     for (int i = 0; i < cnt; i++)

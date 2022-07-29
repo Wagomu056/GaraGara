@@ -13,6 +13,8 @@
 __declspec(dllexport)
 #endif
 
+//#define ENABLE_DEBUG_SPAWN
+
 static const float HOLE_X = 250;
 static const float HOLE_Y = 170;
 
@@ -21,6 +23,7 @@ static PlaydateAPI* _pd;
 enum MainState
 {
     MainStateGara = 0,
+    MainStateSpawnBall,
     MainStateCutin,
     MainStateWaitButton
 };
@@ -31,6 +34,8 @@ void updateStateGara(void)
 {
     PDButtons pushed;
     _pd->system->getButtonState(NULL, &pushed, NULL);
+
+#ifdef ENABLE_DEBUG_SPAWN
     if ( pushed & kButtonA )
     {
         const char *name = lottery();
@@ -43,6 +48,7 @@ void updateStateGara(void)
     {
         spawnBall(HOLE_X, HOLE_Y);
     }
+#endif // ENABLE_DEBUG_SPAWN
 
     updateBall();
 
@@ -60,7 +66,9 @@ void updateStateWaitButton(void)
     _pd->system->getButtonState(NULL, &pushed, NULL);
     if ( pushed & kButtonA )
     {
+        clearBall();
         clearCutin();
+        clearIsBallIn();
         _state = MainStateGara;
     }
 }
@@ -77,12 +85,14 @@ int update(void* ud)
 {
     switch (_state) {
         case MainStateGara:
+        case MainStateSpawnBall:
             updateStateGara();
             break;
         case MainStateCutin:
             updateStateCutin();
             break;
         case MainStateWaitButton:
+            updateStateGara();
             updateStateWaitButton();
             break;
     }
@@ -100,13 +110,20 @@ void cutinEnd(void)
 
 void ballSpawn(void)
 {
+    if (_state != MainStateGara) return;
+
+    _state = MainStateSpawnBall;
     spawnBall(HOLE_X, HOLE_Y);
     LOG("Ball spawn.");
 }
 
 void onStopBall(void)
 {
-    clearBall();
+    const char *name = lottery();
+    if (strcmp(name, "") != 0) {
+        startCutin(name);
+        _state = MainStateCutin;
+    }
 }
 
 static void initialize()

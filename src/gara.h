@@ -12,5 +12,6 @@ typedef void (* BallSpawnHandler)(void);
 void initGara(PlaydateAPI* pd);
 void updateGara(float garaRotDeg);
 void registerBallSpawn(BallSpawnHandler handler);
+void clearIsBallIn(void);
 
 #endif //BOUND_BALL_GARA_H

@@ -82,3 +82,8 @@ void registerBallSpawn(BallSpawnHandler handler)
 {
     _handler = handler;
 }
+
+void clearIsBallIn(void)
+{
+    _isBallIn = 0;
+}

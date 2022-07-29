@@ -38,7 +38,8 @@ void initBall(PlaydateAPI* pd)
 
 void spawnBall(int x, int y)
 {
-    _velX = 2.0f;
+    const int rnd = rand() % 15;
+    _velX = 1.5f + (rnd * 0.1f);
     _velY = 0.0f;
 
     _pd->sprite->addSprite(_sprite);

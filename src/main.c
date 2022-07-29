@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "ball.h"
 #include "pd_api.h"
 #include "log.h"
 #include "cutin_drawer.h"
@@ -11,6 +12,9 @@
 #ifdef _WINDLL
 __declspec(dllexport)
 #endif
+
+static const float HOLE_X = 150;
+static const float HOLE_Y = 170;
 
 static PlaydateAPI* _pd;
 
@@ -35,9 +39,15 @@ void updateStateGara(void)
             _state = MainStateCutin;
         }
     }
+    else if ( pushed & kButtonB )
+    {
+        spawnBall(HOLE_X, HOLE_Y);
+    }
 
     const float crankAngle = _pd->system->getCrankAngle();
     updateGara(crankAngle);
+
+    updateBall();
 }
 
 void updateStateCutin(void)
@@ -103,6 +113,8 @@ static void initialize()
     registerLottery("KAKI");
 
     initGara(_pd);
+
+    initBall(_pd);
 
     _state = MainStateGara;
 }

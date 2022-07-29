@@ -7,8 +7,12 @@
 
 #include <pd_api.h>
 
+typedef void (* BallStopHandler)(void);
+
 void initBall(PlaydateAPI* pd);
 void spawnBall(int x, int y);
 void updateBall(void);
+void registerBallStop(BallStopHandler handler);
+void clearBall(void);
 
 #endif //BOUND_BALL_BALL_H

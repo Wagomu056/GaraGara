@@ -104,6 +104,11 @@ void ballSpawn(void)
     LOG("Ball spawn.");
 }
 
+void onStopBall(void)
+{
+    clearBall();
+}
+
 static void initialize()
 {
     initCutin(_pd);
@@ -119,9 +124,10 @@ static void initialize()
     registerLottery("KAKI");
 
     initGara(_pd);
+    registerBallSpawn(ballSpawn);
 
     initBall(_pd);
-    registerBallSpawn(ballSpawn);
+    registerBallStop(onStopBall);
 
     _state = MainStateGara;
 }

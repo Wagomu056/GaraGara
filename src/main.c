@@ -13,7 +13,7 @@
 __declspec(dllexport)
 #endif
 
-static const float HOLE_X = 150;
+static const float HOLE_X = 250;
 static const float HOLE_Y = 170;
 
 static PlaydateAPI* _pd;

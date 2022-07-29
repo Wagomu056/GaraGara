@@ -32,7 +32,7 @@ void initBall(PlaydateAPI* pd)
 
 void spawnBall(int x, int y)
 {
-    _velX = -2.0f;
+    _velX = 2.0f;
     _velY = 0.0f;
 
     _pd->sprite->addSprite(_sprite);
@@ -49,7 +49,7 @@ void updateBall(void)
 
     if (_velY > 0.0f && _pos.y >= FLOOR_HEIGHT) {
         _velY *= -0.6f;
-        _velX = clamp(_velX + 0.3f, -1.0f, 0.0f);
+        _velX = clamp(_velX - 0.3f, 0.0f, 2.0f);
     }
 
     if (_pos.y >= FLOOR_HEIGHT) {

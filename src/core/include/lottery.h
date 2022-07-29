@@ -7,5 +7,6 @@
 
 void registerLottery(const char* name);
 const char* lottery(void);
+int getLotteryRegisterNum(void);
 
 #endif //BOUND_BALL_LOTTERY_H

@@ -111,6 +111,7 @@ void cutinEnd(void)
 void ballSpawn(void)
 {
     if (_state != MainStateGara) return;
+    if (getLotteryRegisterNum() == 0) return;
 
     _state = MainStateSpawnBall;
     spawnBall(HOLE_X, HOLE_Y);

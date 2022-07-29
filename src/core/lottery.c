@@ -38,3 +38,8 @@ const char* lottery(void)
 
     return ret;
 }
+
+int getLotteryRegisterNum(void)
+{
+    return _registerNum;
+}

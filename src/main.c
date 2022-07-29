@@ -44,10 +44,10 @@ void updateStateGara(void)
         spawnBall(HOLE_X, HOLE_Y);
     }
 
+    updateBall();
+
     const float crankAngle = _pd->system->getCrankAngle();
     updateGara(crankAngle);
-
-    updateBall();
 }
 
 void updateStateCutin(void)
@@ -98,6 +98,12 @@ void cutinEnd(void)
     LOG("Cut in end.");
 }
 
+void ballSpawn(void)
+{
+    spawnBall(HOLE_X, HOLE_Y);
+    LOG("Ball spawn.");
+}
+
 static void initialize()
 {
     initCutin(_pd);
@@ -115,6 +121,7 @@ static void initialize()
     initGara(_pd);
 
     initBall(_pd);
+    registerBallSpawn(ballSpawn);
 
     _state = MainStateGara;
 }

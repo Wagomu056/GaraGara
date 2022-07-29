@@ -4,6 +4,7 @@
 
 #include "pd_uitl.h"
 #include "gara.h"
+#include "log.h"
 
 static PlaydateAPI* _pd;
 static LCDBitmap *_garaImageOriginal = NULL;
@@ -11,6 +12,11 @@ static LCDBitmap *_garaImage = NULL;
 static LCDSprite *_garaSprite = NULL;
 
 static LCDBitmap *_image_base = NULL;
+
+static float _prevRot = 0.0f;
+static float _rotSpeed = 0.0f;
+static int _isBallIn = 0;
+static BallSpawnHandler _handler = NULL;
 
 void initGara(PlaydateAPI* pd)
 {
@@ -46,5 +52,33 @@ void updateGara(float garaRotDeg)
     _garaImage = _pd->graphics->rotatedBitmap(_garaImageOriginal,
                                               garaRotDeg, 1.0f, 1.0f, &allocSize);
     _pd->sprite->setImage(_garaSprite, _garaImage, kBitmapUnflipped);
+
+    if (garaRotDeg >= _prevRot) {
+        _rotSpeed = garaRotDeg - _prevRot;
+    }
+    else {
+       _rotSpeed = garaRotDeg - (_prevRot - 360.0f);
+    }
+
+    if (garaRotDeg >= 45.0f && _prevRot < 45.0f) {
+        if (_rotSpeed < 10.0f) {
+            _isBallIn = 1;
+            LOG("IN");
+        }
+    }
+
+    if (garaRotDeg >= 340.0f && _prevRot < 340.0f) {
+        if (_rotSpeed < 10.0f && _isBallIn) {
+            _isBallIn = 0;
+            LOG("SPAWN");
+            if (_handler) { _handler(); }
+        }
+    }
+
+    _prevRot = garaRotDeg;
 }
 
+void registerBallSpawn(BallSpawnHandler handler)
+{
+    _handler = handler;
+}

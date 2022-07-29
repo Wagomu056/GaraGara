@@ -7,7 +7,10 @@
 
 #include <pd_api.h>
 
+typedef void (* BallSpawnHandler)(void);
+
 void initGara(PlaydateAPI* pd);
 void updateGara(float garaRotDeg);
+void registerBallSpawn(BallSpawnHandler handler);
 
 #endif //BOUND_BALL_GARA_H
